@@ -1,9 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-import pandas as pd
 import json
-from typing import List, Dict
+from typing import Dict
 
 from paramns import COOKIES, HEADERS
 
