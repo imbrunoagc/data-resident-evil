@@ -7,7 +7,9 @@
 
 ## Static code analysis: Ruff
 1. Usando Ruff formator de código em Python, escrito em Rust para organização e padrões PEP8
-
+``` bash
+poetry run ruff check .
+```
 
 ## Camadas: Medelion (Bronze, Silver e Gold)
 1. Utilizar PyDantic
