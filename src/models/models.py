@@ -3,8 +3,8 @@ from sqlalchemy.orm import declarative_base
 
 Base = declarative_base()
 
-class Item(Base):
-    __tablename__ = 'characters_person'
+class CharactersPerson(Base):
+    __tablename__ = 'bronze.characters_person'
 
     id = Column(Integer, primary_key=True, index=True)
     ano_de_nascimento = Column(String, nullable=True)
