@@ -1,8 +1,8 @@
 # tests/test_main.py
 import pytest
 from unittest.mock import patch, mock_open
-from resident_evil_request.collect import write_data_raw
-from resident_evil_request.paramns import COOKIES, HEADERS
+from src.collect import write_data_raw
+from src.paramns import COOKIES, HEADERS
 
 FAKE_DADOS = {"nome": "Exemplo", "valor": 123}
 

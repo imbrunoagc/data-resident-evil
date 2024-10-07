@@ -1,7 +1,7 @@
 # tests/test_main.py
 import pytest
 from unittest.mock import patch, mock_open
-from resident_evil_request.collect import get_links
+from src.collect import get_links
 
 # Dados simulados para os testes
 FAKE_URL = "https://api.exemplo.com/links"
