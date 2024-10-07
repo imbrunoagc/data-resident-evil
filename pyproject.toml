@@ -15,6 +15,7 @@ ipykernel = "^6.29.5"
 tqdm = "^4.66.5"
 pytest = "^8.3.3"
 pydantic = "^2.9.2"
+sqlalchemy = "^2.0.35"
 
 
 [tool.poetry.group.dev.dependencies]

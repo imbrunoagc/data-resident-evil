@@ -1,6 +1,6 @@
 from pydantic import ValidationError
 import json
-from schemas import CharactersPerson
+from src.schemas.schemas import CharactersPerson
 
 if __name__ == '__main__':
     # Carregando o arquivo JSON

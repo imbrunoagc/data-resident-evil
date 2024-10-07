@@ -78,7 +78,7 @@ def write_data_raw(data: Dict) -> None:
         except Exception as e:
             print(f'Error: {e}')
 
-FILE_PATH = '../data/raw/basic_information_characters.json'
+FILE_PATH = '././data/raw/basic_information_characters.json'
 
 data = run_collect_data()
 if data:
