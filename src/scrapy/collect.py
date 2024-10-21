@@ -2,85 +2,94 @@ import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
 import json
-from typing import Dict
+from typing import Dict, List
 
-from paramns import COOKIES, HEADERS
+class collect:
+    def __init__(self, cookies, headers) -> None:
+        self.cookies = cookies
+        self.headers = headers
 
-def get_content(url: str):
-    response = requests.get(url=url, cookies=COOKIES, headers=HEADERS)
-    print(response.status_code)
-    return response
+    def get_content(self, url: str) -> List:
+        response = requests.get(url=url, cookies=self.cookies, headers=self.headers)
+        print(response.status_code)
+        return response
 
-def get_basic_infos(soup):
-    div_page = soup.find('div', class_ = 'td-page-content')
-    paragrafo = div_page.find_all('p')[1]
-    ems = paragrafo.find_all('em')
-    data = dict()
+    def get_basic_infos(self, soup: List) -> Dict:
+        div_page = soup.find('div', class_ = 'td-page-content')
+        paragrafo = div_page.find_all('p')[1]
+        ems = paragrafo.find_all('em')
+        data = dict()
 
-    for i in ems:
-        chave, valor, *_ = i.text.split(":")
-        chave = chave.strip(" ")
-        valor = valor.strip(" ")
-        data[chave] = valor
-    return data
-
-def get_aparicoes(soup): 
-    lis = (soup
-        .find('div', class_ = 'td-page-content')
-        .find('h4')
-        .find_next()
-        .find_all('li'))
-    
-    return [i.text for i in lis]
-
-def get_personagem_infos(url):
-    resp = get_content(url)
-    if resp.status_code != 200:
-        print("Não foi possivel obter os dados")
-    else:
-        soup = BeautifulSoup(resp.text)
-
-        data = get_basic_infos(soup)
-        data['aparicoes'] = get_aparicoes(soup)
+        for i in ems:
+            chave, valor, *_ = i.text.split(":")
+            chave = chave.strip(" ")
+            valor = valor.strip(" ")
+            data[chave] = valor
         return data
 
-def get_links():
-    url = 'https://www.residentevildatabase.com/personagens/'
-    resp = requests.get(url=url, headers=HEADERS, cookies=COOKIES)
-    soup_personagens = BeautifulSoup(resp.text) 
-    ancoras = (soup_personagens.find('div', class_ = 'td-page-content')
-                            .find_all('a'))
+    def get_aparicoes(self, soup: List) -> List: 
+        lis = (soup
+            .find('div', class_ = 'td-page-content')
+            .find('h4')
+            .find_next()
+            .find_all('li'))
+        
+        return [i.text for i in lis]
 
-    links = [i["href"] for i in ancoras]
-    return links
+    def get_personagem_infos(self, url: str):
+        resp = self.get_content(url)
+        if resp.status_code != 200:
+            print("Não foi possivel obter os dados")
+        else:
+            soup = BeautifulSoup(resp.text)
 
-def run_collect_data():
-    data = []
-    urls_blocked = ['https://www.residentevildatabase.com/doug-re5-desperate-escape/']
+            data = self.get_basic_infos(soup)
+            data['aparicoes'] = self.get_aparicoes(soup)
+            return data
 
-    links = get_links()
+    def get_links(self) -> List:
+        url = 'https://www.residentevildatabase.com/personagens/'
+        resp = requests.get(url=url, headers=self.headers, cookies=self.cookies)
+        soup_personagens = BeautifulSoup(resp.text) 
+        ancoras = (
+                    soup_personagens
+                    .find('div', class_ = 'td-page-content')
+                    .find_all('a')
+                    )
 
-    for i in tqdm(links):
-        if i in urls_blocked:
-            continue
-        print(i)
-        d = get_personagem_infos(i)
-        d['link'] = i
-        d['name'] = i.split('/')[-2]
-        data.append(d)
-    return data
+        links = [i["href"] for i in ancoras]
+        return links
 
-def write_data_raw(data: Dict) -> None:
-    with open(FILE_PATH, 'w') as output_file:
-        try:
-            json.dump(data, output_file, indent=2)
-            print(f'success in writing the file: {FILE_PATH}')
-        except Exception as e:
-            print(f'Error: {e}')
+    def run_collect_data(self) -> List:
+        data = []
+        urls_blocked = ['https://www.residentevildatabase.com/doug-re5-desperate-escape/']
+
+        links = self.get_links()
+
+        for i in tqdm(links):
+            if i in urls_blocked:
+                continue
+            print(i)
+            d = self.get_personagem_infos(i)
+            d['link'] = i
+            d['name'] = i.split('/')[-2]
+            data.append(d)
+        return data
+
+    def write_data_raw(self, data: Dict, file_path: str) -> None:
+        with open(file_path, 'w') as output_file:
+            try:
+                json.dump(data, output_file, indent=2)
+                print(f'success in writing the file: {FILE_PATH}')
+            except Exception as e:
+                print(f'Error: {e}')
+    
+    def run_collect(self, file_path: str) -> None:
+        data = self.run_collect_data()
+        if data:
+            self.write_data_raw(data, file_path)
 
 if __name__ == "__main__":
+    from paramns import COOKIES, HEADERS
     FILE_PATH = '././data/raw/basic_information_characters.json'
-
-    data = run_collect_data()
-    if data:
-        write_data_raw(data)
+    collect(COOKIES, HEADERS).run_collect(FILE_PATH)
