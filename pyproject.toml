@@ -16,6 +16,9 @@ tqdm = "^4.66.5"
 pytest = "^8.3.3"
 pydantic = "^2.9.2"
 sqlalchemy = "^2.0.35"
+minio = "^7.2.10"
+python-dotenv = "^1.0.1"
+pyarrow = "^18.0.0"
 
 
 [tool.poetry.group.dev.dependencies]
