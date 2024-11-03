@@ -84,12 +84,15 @@ class collect:
             except Exception as e:
                 print(f'Error: {e}')
     
-    def run_collect(self, file_path: str) -> None:
+    def run_collect(self, file_path: str = None, if_local: bool = True) -> None:
         data = self.run_collect_data()
         if data:
-            self.write_data_raw(data, file_path)
+            if if_local:
+                return self.write_data_raw(data, file_path)
+            else:
+                return data
 
 if __name__ == "__main__":
     from paramns import COOKIES, HEADERS
     FILE_PATH = '././data/raw/basic_information_characters.json'
-    collect(COOKIES, HEADERS).run_collect(FILE_PATH)
+    collect(COOKIES, HEADERS).run_collect(FILE_PATH, False)
