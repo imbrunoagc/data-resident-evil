@@ -1,36 +1,32 @@
-import json
-from datetime import datetime
-from typing import List, Dict
+import os
+from minio import Minio
+from dotenv import load_dotenv
+from scrapy.collect import collect
+from scrapy.paramns import COOKIES, HEADERS
+from resources.minio_manager import PandasBucket
 
-class Bronze():
-    def get_data_json(self, path_file:str) -> List:
+load_dotenv(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '.env'))
+
+
+class ResidentEvil_to_BronzeMinio:
+    def __init__(self) -> None:
+        self.client = Minio(
+            endpoint=os.getenv('ENDPOINT'),
+            access_key=os.getenv('ACCESS_KEY'),
+            secret_key=os.getenv('SECRET_KEY'),
+            secure=False
+            )
+        self.cookies = COOKIES
+        self.headers = HEADERS
+    
+    def run_bronze(self, name_bucket: str, name_file: str):
+        data_resident_evil = collect(self.cookies, self.headers).run_collect(if_local=False)
+        s3_bronze = PandasBucket(client=self.client, name=name_bucket)
         try:
-            with open(path_file, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                return data
-        except FileNotFoundError:
-            print("Arquivo JSON não encontrado.")
-        except json.JSONDecodeError:
-            print("Erro ao decodificar o arquivo JSON.")
-
-    def add_data_processed(self, data:list) -> list:
-        now = datetime.now()
-        if isinstance(data, list):
-            for item in data:
-                if isinstance(item, dict):
-                    item['date_processed'] = now.isoformat()
-        return data
-
-    def write_data_raw(self, data: Dict, file_path: str) -> None:
-        with open(file_path, 'w') as output_file:
-            try:
-                json.dump(data, output_file, indent=2)
-                print(f'success in writing the file: {file_path}')
-            except Exception as e:
-                print(f'Error: {e}')
-
+            s3_bronze.write_dict_to_json(data_resident_evil, name_file)
+            print(f'success in writing the file: {name_bucket}/{name_file}')
+        except Exception as e:
+            print(f"Error: {e}")
+                  
 if __name__ == "__main__":
-    bronze = Bronze()
-    data = bronze.get_data_json('../data/raw/raw_characters.json')
-    data = bronze.add_data_processed(data)
-    bronze.write_data_raw(data, '../data/bronze/bronze_characters.json')
+    ResidentEvil_to_BronzeMinio().run_bronze('resident-evil', 'bronze/person_characters')
