@@ -29,4 +29,4 @@ class ResidentEvil_to_BronzeMinio:
             print(f"Error: {e}")
                   
 if __name__ == "__main__":
-    ResidentEvil_to_BronzeMinio().run_bronze('resident-evil', 'bronze/person_characters')
+    ResidentEvil_to_BronzeMinio().run_bronze('resident-evil', 'bronze/person_characters.json')
