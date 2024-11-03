@@ -95,4 +95,5 @@ class collect:
 if __name__ == "__main__":
     from paramns import COOKIES, HEADERS
     FILE_PATH = '././data/raw/basic_information_characters.json'
-    collect(COOKIES, HEADERS).run_collect(FILE_PATH, False)
+    data  = collect(COOKIES, HEADERS).run_collect(FILE_PATH, False)
+    print(data)
