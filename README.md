@@ -74,3 +74,6 @@ A arquitetura proposta é a seguinte:
 
 
 ## Como executar o pytest?
+
+
+## Setup de execução do projeto em Docker
