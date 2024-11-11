@@ -2,22 +2,19 @@ import os
 import pandas as pd
 from typing import List
 from datetime import datetime
-from dotenv import load_dotenv
-
 import boto3
 from resources.boto3_manager import PandasBucket
 from tools.transform import extract_year, extract_type_sanguine, extract_height, extract_weight
 
-
-load_dotenv(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '.env'))
+print("### Acesso o Modulo Silver.py ###")
 
 class ResidentEvil_Bronze_to_Silver:
     def __init__(self) -> None:
         self.client = boto3.client(
                 's3',
-                endpoint_url='http://localhost:9000',  # Correct API port
-                aws_access_key_id=os.getenv('ACCESS_KEY'),
-                aws_secret_access_key=os.getenv('SECRET_KEY'),
+                endpoint_url=os.environ.get('ENDPOINT'),  # Correct API port
+                aws_access_key_id=os.environ.get('ACCESS_KEY'),
+                aws_secret_access_key=os.environ.get('SECRET_KEY'),
                 region_name='us-east-1'
             )
     
@@ -45,6 +42,8 @@ class ResidentEvil_Bronze_to_Silver:
         s3_resident = self.__get_bucket('resident-evil')
         df = self._transform_json_to_dataframe()
         s3_resident.put_parquet(df, 'silver/person_characters.parquet')
+        
+        print("### Finalizou o Modulo Silver.py ###")
     
 
 if __name__ == "__main__":
