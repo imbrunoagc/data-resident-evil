@@ -13,8 +13,7 @@ services:
       - "9001:9001"
     command: server /data --console-address ":9001"
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
-      interval: 30s
+      test: ["CMD", "curl", "-f", "http://minio:9000/minio/health/live"]
       timeout: 20s
       retries: 3
 
@@ -36,14 +35,14 @@ services:
       context: ./src
     container_name: medallion
     environment:
-      ENDPOINT: 127.0.0.1:9000
+      ENDPOINT: http://minio:9000 #127.0.0.1:9000
       ACCESS_KEY: minioadmin
       SECRET_KEY: minioadmin
     depends_on:
       minio:
         condition: service_healthy
-#    command: >
-#      bash -c "python bronze.py && python silver.py"
+    command: >
+      bash -c "python bronze.py && python silver.py"
   
 volumes:
   minio-data:
