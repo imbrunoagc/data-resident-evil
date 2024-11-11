@@ -1,0 +1,48 @@
+#version: '3.8'
+services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    command: server /data --console-address ":9001"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://minio:9000/minio/health/live"]
+      timeout: 20s
+      retries: 3
+
+  minio-mc:
+    image: minio/mc:latest
+    container_name: minio-mc
+    depends_on:
+      - minio
+    entrypoint: |
+      sh -c "
+      sleep 10 &&
+      mc alias set myminio http://minio:9000 minioadmin minioadmin &&
+      mc mb myminio/resident-evil/bronze &&
+      mc mb myminio/resident-evil/silver
+      "
+
+  python-scripts-medallion:
+    build:
+      context: ./src
+    container_name: medallion
+    environment:
+      ENDPOINT: http://minio:9000 #127.0.0.1:9000
+      ACCESS_KEY: minioadmin
+      SECRET_KEY: minioadmin
+    depends_on:
+      minio:
+        condition: service_healthy
+    command: >
+      bash -c "python bronze.py && python silver.py"
+  
+volumes:
+  minio-data:
