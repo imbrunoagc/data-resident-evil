@@ -42,6 +42,7 @@ class ResidentEvil_Bronze_to_Silver:
         df['peso'] = df['Peso'].apply(extract_weight)
         df['altura'] = df['altura'].apply(extract_number) # extração apenas do valor numerico
         df['peso'] = df['peso'].apply(extract_number) # extração apenas do valor numerico
+        df['pathimage'] = 'https://www.residentevildatabase.com/wp-content/uploads/2023/12/' + df['name'] +'.jpg'
         df['IngestionDate'] = datetime.now().strftime('%Y-%m-%d')
         df['IngestionTime'] = datetime.now().strftime('%H:%M:%S')
         df['Source'] = 'DataResidentEvil'
