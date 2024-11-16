@@ -37,3 +37,10 @@ def extract_weight(value) -> str:
         if match:
             return match.group(0)
     return "Desconhecido"
+
+
+def extract_number(value):
+    match = re.match(r"([0-9,\.]+)", str(value)) # Expressão regular para capturar o número (incluindo vírgula ou ponto como separador decimal)
+    if match:
+        return float(match.group(1).replace(',', '.'))  # Converte para float, substituindo vírgula por ponto
+    return None  # Retorna None se não houver número válido
