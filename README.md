@@ -57,6 +57,9 @@ A arquitetura proposta é a seguinte:
 |   |   |── __init__.py
 |   |   |── collect.py
 |   |   └── paramns.py
+|   |── tools/
+|   |   |── transform.py
+|   |   └── rules_gold.py
 |   |── __init__.py
 |   |── bronze.py
 |   |── silver.py
@@ -94,23 +97,16 @@ Agora, faça um ``docker-compose down -v``, para derrubar os serviços e deletar
 | **Distribuição por Tipo Sanguíneo** | Contar o número de personagens por `tipo_sanguineo`.                                | **Sim** - Agrega dados categóricos que podem ser usados em análises e dashboards.                                         |
 | **Média de Altura por Tipo Sanguíneo** | Calcular `mean(altura)` agrupando por `tipo_sanguineo`.                              | **Sim** - Transformação de dados brutos para uma métrica consolidada.                                                    |
 | **Média de Peso por Tipo Sanguíneo** | Calcular `mean(peso)` agrupando por `tipo_sanguineo`.                                | **Sim** - Métrica consolidada para análises específicas.                                                                 |
-| **Altura x Peso (Scatter)**     | Não há agregação; apenas exibição individual dos dados (gráfico de dispersão).     | **Não** - Dados brutos, melhor na camada **Silver** para análise exploratória.                                           |
-| **Personagens por Décadas**     | Criar coluna `decada = (ano_de_nascimento // 10) * 10` e contar por década.        | **Sim** - Visão temporal consolidada, útil para análise histórica.                                                       |
-| **Personagem Mais Velho**       | Ordenar por `ano_de_nascimento` e pegar o mais antigo.                            | **Sim** - Agregação simples que facilita análises posteriores.                                                           |
-| **Catálogo de Links**           | Selecionar apenas `link` e `aparicoes` para exibição direta.                       | **Sim** - Útil para rastrear as fontes dos dados na camada de apresentação.                                               |
-| **Desvio Padrão de Altura e Peso** | Calcular `std(altura)` e `std(peso)`.                                               | **Sim** - Métrica agregada para variações físicas.                                                                        |
-| **Proporção de Tipos Sanguíneos** | Dividir contagem de cada tipo pela soma total de tipos sanguíneos.                  | **Sim** - Percentuais e proporções são adequados para Gold.                                                              |
-| **Clusters Físicos (Altura x Peso)** | Aplicar clusterização (ex: K-means) com os dados de altura e peso.                  | **Sim** - Análise avançada com resultados agregados.                                                                     |
-| **Taxa de Aparições por Ano de Nascimento** | `aparicoes / (2024 - ano_de_nascimento)`, considerando 2024 como o ano atual.      | **Sim** - Métrica derivada útil para comparar popularidade ajustada pela idade.                                          |
+| **Altura x Peso (Scatter)**     | Não há agregação; apenas exibição individual dos dados (gráfico de dispersão).     | **Não** - Dados brutos, melhor na camada **Silver** para análise exploratória.
 
 ## Como executar o ruff?
 
 ```bash
 # Execução para verificar o código
-> poetry run python ruff check .
+> ruff check .
 
 # Execução para verificar o código e corrigir
-> poetry run python ruff check . --fix
+> ruff check . --fix
 ```
 
 ## Como executar o pytest?
