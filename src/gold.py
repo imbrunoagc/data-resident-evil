@@ -40,7 +40,7 @@ if __name__ == "__main__":
     data = cls_gold._get_parquet_s3()
     
     df_exploded = explode_dataframe(data, 'aparicoes') #exploded data
-    
+    df_exploded.to_parquet('./data/gold_persist/characters_exploded.parquet', engine='pyarrow')
     cls_gold.build_and_loadS3(df_exploded, 'characters_exploded')
     cls_gold.build_and_loadS3(top_10_most_popular_characters(df_exploded), 'top_10_most_popular_characters')
     cls_gold.build_and_loadS3(top_10_characters_with_most_appearances(df_exploded), 'top_10_characters_with_most_appearances')
