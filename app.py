@@ -1,5 +1,5 @@
 import streamlit as st
-
+import pandas as pd
 from frontend.configs.settings_page import setup_page
 from frontend.components.footer import footer
 from frontend.components.input_css import styling
@@ -10,7 +10,12 @@ setup_page() # Page configuration
 
 st.markdown(styling, unsafe_allow_html=True) # CSS styling
 
-df = readFile('characters_exploded') # Readed data
+LOCAL = True
+
+if LOCAL:
+    df = pd.read_parquet('data/gold_persist/characters_exploded.parquet', engine='pyarrow') # Local
+else:
+    df = readFile('characters_exploded') # S3
 
 col1, col2 = st.columns([0.5, 3]) # Set 2 columns
 
