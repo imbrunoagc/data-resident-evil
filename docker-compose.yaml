@@ -27,7 +27,8 @@ services:
       sleep 10 &&
       mc alias set myminio http://minio:9000 minioadmin minioadmin &&
       mc mb myminio/resident-evil/bronze &&
-      mc mb myminio/resident-evil/silver
+      mc mb myminio/resident-evil/silver &&
+      mc mb myminio/resident-evil/gold
       "
 
   python-scripts-medallion:
@@ -42,7 +43,7 @@ services:
       minio:
         condition: service_healthy
     command: >
-      bash -c "python bronze.py && python silver.py"
+      bash -c "python bronze.py && python silver.py && python gold.py"
   
 volumes:
   minio-data:
