@@ -23,6 +23,9 @@ matplotlib = "^3.9.2"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"
 
+[tool.ruff.lint]
+select = ["B","I"]
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
