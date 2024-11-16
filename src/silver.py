@@ -4,7 +4,7 @@ from typing import List
 from datetime import datetime
 import boto3
 from resources.boto3_manager import PandasBucket
-from tools.transform import extract_year, extract_type_sanguine, extract_height, extract_weight
+from tools.transform import extract_year, extract_type_sanguine, extract_height, extract_weight, extract_number
 
 print("### Acesso o Modulo Silver.py ###")
 
@@ -12,7 +12,7 @@ class ResidentEvil_Bronze_to_Silver:
     def __init__(self) -> None:
         self.client = boto3.client(
                 's3',
-                endpoint_url=os.environ.get('ENDPOINT'),  # Correct API port
+                endpoint_url='http://localhost:9000', #os.environ.get('ENDPOINT'),  # Correct API port
                 aws_access_key_id=os.environ.get('ACCESS_KEY'),
                 aws_secret_access_key=os.environ.get('SECRET_KEY'),
                 region_name='us-east-1'
@@ -32,6 +32,8 @@ class ResidentEvil_Bronze_to_Silver:
         df['tipo_sanguineo'] = df['Tipo sanguíneo'].apply(extract_type_sanguine)
         df['altura'] = df['Altura'].apply(extract_height)
         df['peso'] = df['Peso'].apply(extract_weight)
+        df['altura'] = df['altura'].apply(extract_number) # extração apenas do valor numerico
+        df['peso'] = df['peso'].apply(extract_number) # extração apenas do valor numerico
         df['IngestionDate'] = datetime.now().strftime('%Y-%m-%d')
         df['IngestionTime'] = datetime.now().strftime('%H:%M:%S')
         df['Source'] = 'DataResidentEvil'
