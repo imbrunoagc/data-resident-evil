@@ -1,8 +1,10 @@
 import os
+
 import boto3
+
+from resources.boto3_manager import PandasBucket
 from scrapy.collect import collect
 from scrapy.paramns import COOKIES, HEADERS
-from resources.boto3_manager import PandasBucket
 
 print("### Acessou o modulo Bronze.py ### ")
 

@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 
+
 def extract_year(value) -> str:
     if isinstance(value, str):
         year = value.strip()[:4]
@@ -18,7 +19,6 @@ def extract_type_sanguine(value: str) -> str:
             '\xa0desconhecido.': 'Desconhecido',
             'desconhecido.': 'Desconhecido',
             'desconhecido': 'Desconhecido',
-            'desconhecido': 'Desconhecido'
         }
         return map.get(value, value.upper())
     return 'Desconhecido'

@@ -1,10 +1,18 @@
 import os
-import pandas as pd
-from typing import List
 from datetime import datetime
+from typing import List
+
 import boto3
+import pandas as pd
+
 from resources.boto3_manager import PandasBucket
-from tools.transform import extract_year, extract_type_sanguine, extract_height, extract_weight, extract_number
+from tools.transform import (
+    extract_height,
+    extract_number,
+    extract_type_sanguine,
+    extract_weight,
+    extract_year,
+)
 
 print("### Acesso o Modulo Silver.py ###")
 
