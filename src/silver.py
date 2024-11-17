@@ -14,8 +14,6 @@ from tools.transform import (
     extract_year,
 )
 
-print("### Acesso o Modulo Silver.py ###")
-
 class ResidentEvil_Bronze_to_Silver:
     def __init__(self) -> None:
         self.client = boto3.client(
@@ -53,11 +51,9 @@ class ResidentEvil_Bronze_to_Silver:
         s3_resident = self.__get_bucket('resident-evil')
         df = self._transform_json_to_dataframe()
         s3_resident.put_parquet(df, 'silver/person_characters.parquet')
-        
-        print("### Finalizou o Modulo Silver.py ###")
     
 
 if __name__ == "__main__":
     ResidentEvil_Bronze_to_Silver().bronze_to_silver()
     
-    print("### Finished the Silver.py Module")
+    print("### 2. Finished the Silver.py Module")

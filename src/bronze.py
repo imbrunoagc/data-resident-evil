@@ -30,4 +30,4 @@ class ResidentEvil_to_BronzeMinio:
 if __name__ == "__main__":
     ResidentEvil_to_BronzeMinio().run_bronze('resident-evil', 'bronze/person_characters.json')
 
-    print("### Finished the Bronze.py Module")
+    print("### 1. Finished the Bronze.py Module")
