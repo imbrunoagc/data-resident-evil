@@ -5,23 +5,45 @@ from frontend.components.footer import footer
 from frontend.components.input_css import styling
 from frontend.resources.readFile import readFile
 
-
 setup_page() # Page configuration
 
-st.markdown(styling, unsafe_allow_html=True) # CSS styling
+st.markdown(styling, unsafe_allow_html=True) # CSS styling in metrics
 
 LOCAL = True
 
-if LOCAL:
-    df = pd.read_parquet('data/gold_persist/characters_exploded.parquet', engine='pyarrow') # Local
-else:
-    df = readFile('characters_exploded') # S3
+if LOCAL: # Local
+    df = pd.read_parquet(
+        'data/characters_exploded.parquet',
+        engine='pyarrow'
+        )
+    
+    df_top_10_characters_with_most_appearances = pd.read_parquet(
+        'data/top_10_characters_with_most_appearances.parquet',
+        engine='pyarrow'
+        )
+    
+    df_top_10_appearances = pd.read_parquet(
+        'data/top_10_appearances.parquet',
+        engine='pyarrow'
+    )
+    
+    df_average_by_blood_type = pd.read_parquet(
+        'data/average_by_blood_type.parquet',
+        engine='pyarrow'
+    )
+    
+    df_blood_type_distribution = pd.read_parquet(
+        'data/blood_type_distribution.parquet',
+        engine='pyarrow'
+    )   
+    
+else: # S3
+    df = readFile('characters_exploded')
+    df_top_10_characters_with_most_appearances = readFile('top_10_characters_with_most_appearances')
+    df_average_by_blood_type = readFile('average_by_blood_type')
+    df_blood_type_distribution = readFile('blood_type_distribution')
 
-col1, col2 = st.columns([0.5, 3]) # Set 2 columns
-
-# Defined divider for column
-col1.header('Metricas', divider="gray")
-col2.header('Gráficos', divider=True)
+col1, col2, col3 = st.columns([1, 3, 1]) # Set 3 columns
 
 # Sidebar
 with st.sidebar:
@@ -37,23 +59,39 @@ with st.sidebar:
     tipo_sague = df.loc[df['name'] == character_picked, 'tipo_sanguineo'].values[0]
     peso = df.loc[df['name'] == character_picked, 'peso'].values[0]
     altura = df.loc[df['name'] == character_picked, 'altura'].values[0]
+    aparicoes = df.loc[df['name'] == character_picked, 'aparicoes'].values
     
     abt_1, abt_2 = st.columns(2)
     abt_1.write(f'**Ano de Nacimento**: {ano_nasc}')
     abt_1.write(f'**Tipo sanguíneo**: {tipo_sague}')
     abt_2.write(f'**Peso**: {peso}')
     abt_2.write(f'**Altura**: {altura}')
+    abt_1.write(f'**Aparicoes**: {len(aparicoes)}')
 
-
+# Metrics
 with col1:
-    
+    st.markdown("### Métricas")
     number_characters_unique = df['name'].nunique()
     st.metric("Numero de personagens", number_characters_unique)
     
     number_appearances = df['aparicoes'].nunique()
     st.metric("Numero de aparicoes", number_appearances)
-    
+
+
+# Graphics
 with col2:
-    pass
+    st.markdown("### Informações")
+    st.table(df_top_10_appearances.rename(columns={'count': 'qtd_aparicoes'}))
+    
+    col2_1, col2_2 = st.columns(2)
+    
+    col2_1.table(df_average_by_blood_type.rename(columns={'altura':'avg_altura', 'peso':'avg_peso'}))
+    col2_2.table(df_blood_type_distribution)
+
+# Top Ranking
+with col3:
+    st.markdown("### Top Ranking")
+    st.dataframe(df_top_10_characters_with_most_appearances\
+        .rename(columns={'count': 'qtd_aparicoes'}), hide_index=True) # Top Ranking
 
 footer()
