@@ -1,4 +1,4 @@
-# Projeto: Data Resident Evil
+# 🎯 Projeto: Data Resident Evil
 
 ## Coleta de Dados e Data Lake com MinIO
 Este projeto de arquitetura open source tem como foco a raspagem de dados de personagens do universo ``Resident Evil``, com armazenamento em um ``data lake`` e exibição em um dashboard interativo. A construção visa boas práticas e clareza em todos os aspectos, da arquitetura à escrita do código.
@@ -112,3 +112,59 @@ Agora, faça um ``docker-compose down -v``, para derrubar os serviços e deletar
 ## Como executar o pytest?
 
 
+## Como executar o Streamlit?
+```bash
+# Para execução local, basta seguir com a instalação do pacote stramlit
+> pip install streamlit | poetry add streamlit
+
+# Execução local
+> streamlit run app.py
+```
+
+# Screenshot
+
+## MiniIO
+
+- 1. Bucket Criado.
+<table>
+    <td>
+    <img src="assets/minIO-buckets.png"
+></img></td></tr>
+</table>
+
+- 2. Camadas do medallion.
+<table>
+    <td>
+    <img src="assets/minIO-layers.png"
+></img></td></tr>
+</table>
+
+- 3. Registros na camada Bronze no formato **JSON**.
+<table>
+    <td>
+    <img src="assets/minIO-records-bronze.png"
+></img></td></tr>
+</table>
+
+- 4. Registros na camada Silver no formato **PARQUET**.
+<table>
+    <td>
+    <img src="assets/minIO-records-silver.png"
+></img></td></tr>
+</table>
+
+- 5. Registros na camada Gold agregados/sumarizados no formato **PARQUET**.
+<table>
+    <td>
+    <img src="assets/minIO-records-gold.png"
+></img></td></tr>
+</table>
+
+## Demo App
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://data-resident-evil-medallion-to-deploy.streamlit.app/)
+
+## Colab notebook graphics
+[![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/imbrunoagc/data-resident-evil/blob/main_medellion/notebook/visualize_data_gold.ipynb)
+
+
+## Streamlit
