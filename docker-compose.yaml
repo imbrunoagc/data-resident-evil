@@ -1,4 +1,4 @@
-#version: '3.8'
+version: '3.8'
 services:
   minio:
     image: minio/minio
@@ -7,7 +7,7 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-      - minio-data:/data
+      - minio-data:/data   # Volume para persistir dados do MinIO
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -22,7 +22,7 @@ services:
     container_name: minio-mc
     depends_on:
       - minio
-    entrypoint: |
+    entrypoint: >
       sh -c "
       sleep 10 &&
       mc alias set myminio http://minio:9000 minioadmin minioadmin &&
@@ -36,14 +36,33 @@ services:
       context: ./src
     container_name: medallion
     environment:
-      ENDPOINT: http://minio:9000 #127.0.0.1:9000
+      ENDPOINT: http://minio:9000
       ACCESS_KEY: minioadmin
       SECRET_KEY: minioadmin
     depends_on:
       minio:
         condition: service_healthy
-    command: >
-      bash -c "python bronze.py && python silver.py && python gold.py"
-  
+    volumes:
+      - ./data:/app/data   # Mapeando o diretório de dados do host para o contêiner
+    entrypoint: >
+      sh -c "
+      until curl -s http://minio:9000/minio/health/live; do
+        echo 'Aguardando MinIO...';
+        sleep 5;
+      done &&
+      python bronze.py && python silver.py && python gold.py
+      "
+
+  frontend-streamlit:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "8501:8501"
+    depends_on:
+      - python-scripts-medallion
+    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=127.0.0.1"]
+
+
 volumes:
-  minio-data:
+  minio-data:   # Definindo o volume para persistência de dados do MinIO
