@@ -5,7 +5,6 @@ from typing import Dict, List, Union
 import boto3
 import pandas as pd
 
-
 class PandasBucket:
     """
     A class that allows to perform operations on a unique bucket in AWS S3 or any S3 compatible storage.
