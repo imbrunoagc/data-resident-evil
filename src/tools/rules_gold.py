@@ -1,17 +1,15 @@
 import pandas as pd
 
-
 def explode_dataframe(df: pd.DataFrame, col: str) -> pd.DataFrame:
     return df.explode(col, ignore_index=True)
 
-def top_10_most_popular_characters(df_exploded: pd.DataFrame) -> pd.DataFrame:
+def top_10_most_popular_appearances(df_exploded: pd.DataFrame) -> pd.DataFrame:
     """
     Ordenar por número de aparições e selecionar os top 10
     """
-    top_popular = df_exploded.sort_values(by="aparicoes", ascending=False).head(10)
-    print("Top 3 Personagens Mais Populares:")
-    print(top_popular[["name", "aparicoes"]])
-    return top_popular
+    top_popular = df_exploded.groupby('aparicoes')['name'].count().reset_index(name='count')
+    top_popular = top_popular.sort_values(by="count", ascending=False).head(10)
+    return top_popular.reset_index(drop=True)
 
 def blood_type_distribution(data: pd.DataFrame) -> pd.DataFrame: 
     """
@@ -33,4 +31,4 @@ def average_height_and_weight_by_blood_type(df: pd.DataFrame) -> pd.DataFrame:
 
 def top_10_characters_with_most_appearances(df_exploded: pd.DataFrame) -> pd.DataFrame:
     df_count_appearances = df_exploded.groupby(['name'])['aparicoes'].count().reset_index(name='count')
-    return df_count_appearances.sort_values(by="count", ascending=False).head(10)
+    return df_count_appearances.sort_values(by="count", ascending=False).head(10).reset_index(drop=True)
