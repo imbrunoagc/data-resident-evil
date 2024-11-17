@@ -5,7 +5,7 @@ from src.resources.boto3_manager import PandasBucket
 
 client = boto3.client(
                 's3',
-                endpoint_url='http://localhost:9000', #os.environ.get('ENDPOINT'),  # Correct API port
+                endpoint_url=os.environ.get('ENDPOINT'), #'http://localhost:9000',# Correct API port
                 aws_access_key_id=os.environ.get('ACCESS_KEY'),
                 aws_secret_access_key=os.environ.get('SECRET_KEY'),
                 region_name='us-east-1'
