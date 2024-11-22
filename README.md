@@ -88,8 +88,20 @@ Como o projeto está construido em serviços docker, o que é preciso para levan
 
 Agora, faça um ``docker-compose down -v``, para derrubar os serviços e deletar os volumes.
 
+Após derrubar os volumes, caso deseje realizar a delete das imagens só realizar os seguintes comandos:
+1. Visualizar as imagens
+```bash
+docker images
+```
+![alt text](assets/docker-images.png)
+
+2. Comando para deletar a imagem por **IMAGE ID**
+```bash
+docker rmi IMAGE ID
+```
+![alt text](assets/docker-rmi-images.png)
+
 ## Métricas e Regras | Gold
-# Métricas e Regras
 
 | **Métrica**                     | **Cálculo/Regra**                                                                 | **Gold? (Sim/Não)**                                                                                                        |
 |----------------------------------|-----------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------|
@@ -165,6 +177,3 @@ Agora, faça um ``docker-compose down -v``, para derrubar os serviços e deletar
 
 ## Colab notebook graphics
 [![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/imbrunoagc/data-resident-evil/blob/main_medellion/notebook/visualize_data_gold.ipynb)
-
-
-## Streamlit
