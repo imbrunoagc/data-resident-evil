@@ -1,6 +1,7 @@
 import re
 from datetime import datetime
 
+
 def extract_year(value) -> str:
     if isinstance(value, str):
         year = value.strip()[:4]
@@ -18,7 +19,6 @@ def extract_type_sanguine(value: str) -> str:
             '\xa0desconhecido.': 'Desconhecido',
             'desconhecido.': 'Desconhecido',
             'desconhecido': 'Desconhecido',
-            'desconhecido': 'Desconhecido'
         }
         return map.get(value, value.upper())
     return 'Desconhecido'
@@ -37,3 +37,10 @@ def extract_weight(value) -> str:
         if match:
             return match.group(0)
     return "Desconhecido"
+
+
+def extract_number(value):
+    match = re.match(r"([0-9,\.]+)", str(value)) # Expressão regular para capturar o número (incluindo vírgula ou ponto como separador decimal)
+    if match:
+        return float(match.group(1).replace(',', '.'))  # Converte para float, substituindo vírgula por ponto
+    return None  # Retorna None se não houver número válido

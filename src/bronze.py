@@ -1,10 +1,10 @@
 import os
+
 import boto3
+
+from resources.boto3_manager import PandasBucket
 from scrapy.collect import collect
 from scrapy.paramns import COOKIES, HEADERS
-from resources.boto3_manager import PandasBucket
-
-print("### Acessou o modulo Bronze.py ### ")
 
 class ResidentEvil_to_BronzeMinio:
     def __init__(self) -> None:
@@ -30,4 +30,4 @@ class ResidentEvil_to_BronzeMinio:
 if __name__ == "__main__":
     ResidentEvil_to_BronzeMinio().run_bronze('resident-evil', 'bronze/person_characters.json')
 
-    print("### Finlizou o Modulo Bronze.py ###")
+    print("### 1. Finished the Bronze.py Module")

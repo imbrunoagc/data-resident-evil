@@ -1,15 +1,16 @@
 FROM python:3.12.2
 
-WORKDIR /app
 
-COPY requirements.txt requirements.txt
+# Copia o restante dos arquivos do projeto
+COPY . /app/src
 
-RUN pip install --no-cache-dir -r requirements.txt
+# Pasta de trabalho raiz no docker
+WORKDIR /app/src
 
-COPY . .
+# Instala as dependências do projeto usando python
+RUN pip install --no-cache-dir -r /app/src/requirements.txt
 
-#ENV ENDPOINT=http://minio:9000
-#ENV ACCESS_KEY=minioadmin
-#ENV SECRET_KEY=minioadmin
+##### Copiar apenas src para que na leitura da funcao no fron, já exista a pasta src
 
 CMD ["python3"]
+#ENTRYPOINT [ "bash", "-c", "python bronze.py & python silver.py & python gold.py" ]

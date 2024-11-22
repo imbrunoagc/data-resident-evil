@@ -1,8 +1,9 @@
-from typing import Union, List, Generator, Dict
 import io
+import json
+from typing import Dict, List, Union
+
 import boto3
 import pandas as pd
-import json
 
 class PandasBucket:
     """

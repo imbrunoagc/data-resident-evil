@@ -1,4 +1,4 @@
-#version: '3.8'
+version: '3.8'
 services:
   minio:
     image: minio/minio
@@ -22,27 +22,50 @@ services:
     container_name: minio-mc
     depends_on:
       - minio
-    entrypoint: |
+    entrypoint: >
       sh -c "
       sleep 10 &&
       mc alias set myminio http://minio:9000 minioadmin minioadmin &&
       mc mb myminio/resident-evil/bronze &&
-      mc mb myminio/resident-evil/silver
+      mc mb myminio/resident-evil/silver &&
+      mc mb myminio/resident-evil/gold
       "
 
   python-scripts-medallion:
     build:
       context: ./src
-    container_name: medallion
+    container_name: backend-medallion
     environment:
-      ENDPOINT: http://minio:9000 #127.0.0.1:9000
+      ENDPOINT: http://minio:9000
       ACCESS_KEY: minioadmin
       SECRET_KEY: minioadmin
     depends_on:
       minio:
         condition: service_healthy
-    command: >
-      bash -c "python bronze.py && python silver.py"
-  
+    volumes:
+      - shared-data:/app/data  # Volume compartilhado
+    entrypoint: >
+      sh -c "
+      until curl -s http://minio:9000/minio/health/live; do
+        echo 'Aguardando MinIO...';
+        sleep 5;
+      done &&
+      python bronze.py && python silver.py && python gold.py
+      "
+
+  frontend-streamlit:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-streamlit
+    ports:
+      - "8501:8501"
+    depends_on:
+      python-scripts-medallion:
+        condition: service_completed_successfully
+    volumes:
+      - shared-data:/app/data  # Volume compartilhado
+
 volumes:
-  minio-data:
+  minio-data: # Volume do MinIO
+  shared-data: # Volume compartilhado entre backend e frontend

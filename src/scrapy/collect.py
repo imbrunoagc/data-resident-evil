@@ -1,8 +1,10 @@
+import json
+from typing import Dict, List
+
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-import json
-from typing import Dict, List
+
 
 class collect:
     def __init__(self, cookies, headers) -> None:

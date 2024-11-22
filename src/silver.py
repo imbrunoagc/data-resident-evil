@@ -1,18 +1,24 @@
 import os
-import pandas as pd
-from typing import List
 from datetime import datetime
-import boto3
-from resources.boto3_manager import PandasBucket
-from tools.transform import extract_year, extract_type_sanguine, extract_height, extract_weight
+from typing import List
 
-print("### Acesso o Modulo Silver.py ###")
+import boto3
+import pandas as pd
+
+from resources.boto3_manager import PandasBucket
+from tools.transform import (
+    extract_height,
+    extract_number,
+    extract_type_sanguine,
+    extract_weight,
+    extract_year,
+)
 
 class ResidentEvil_Bronze_to_Silver:
     def __init__(self) -> None:
         self.client = boto3.client(
                 's3',
-                endpoint_url=os.environ.get('ENDPOINT'),  # Correct API port
+                endpoint_url=os.environ.get('ENDPOINT'), #'http://localhost:9000'  # Correct API port
                 aws_access_key_id=os.environ.get('ACCESS_KEY'),
                 aws_secret_access_key=os.environ.get('SECRET_KEY'),
                 region_name='us-east-1'
@@ -32,6 +38,9 @@ class ResidentEvil_Bronze_to_Silver:
         df['tipo_sanguineo'] = df['Tipo sanguíneo'].apply(extract_type_sanguine)
         df['altura'] = df['Altura'].apply(extract_height)
         df['peso'] = df['Peso'].apply(extract_weight)
+        df['altura'] = df['altura'].apply(extract_number) # extração apenas do valor numerico
+        df['peso'] = df['peso'].apply(extract_number) # extração apenas do valor numerico
+        df['pathimage'] = 'https://www.residentevildatabase.com/wp-content/uploads/2023/12/' + df['name'] +'.jpg'
         df['IngestionDate'] = datetime.now().strftime('%Y-%m-%d')
         df['IngestionTime'] = datetime.now().strftime('%H:%M:%S')
         df['Source'] = 'DataResidentEvil'
@@ -42,9 +51,9 @@ class ResidentEvil_Bronze_to_Silver:
         s3_resident = self.__get_bucket('resident-evil')
         df = self._transform_json_to_dataframe()
         s3_resident.put_parquet(df, 'silver/person_characters.parquet')
-        
-        print("### Finalizou o Modulo Silver.py ###")
     
 
 if __name__ == "__main__":
     ResidentEvil_Bronze_to_Silver().bronze_to_silver()
+    
+    print("### 2. Finished the Silver.py Module")

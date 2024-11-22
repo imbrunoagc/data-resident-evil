@@ -2,28 +2,41 @@
 name = "data-collect-teomewhy"
 version = "0.1.0"
 description = ""
-authors = ["Bruno Augusto <120321738+imbrunoagc@users.noreply.github.com>"]
+authors = ["Bruno Augusto <brunoaugusto864@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.12.2"
 pandas = "^2.2.3"
 requests = "^2.32.3"
-scrapy = "^2.11.2"
 beautifulsoup4 = "^4.12.3"
-ipykernel = "^6.29.5"
 tqdm = "^4.66.5"
-pytest = "^8.3.3"
-pydantic = "^2.9.2"
-sqlalchemy = "^2.0.35"
-minio = "^7.2.10"
-python-dotenv = "^1.0.1"
 pyarrow = "^18.0.0"
 boto3 = "^1.35.57"
-
+matplotlib = "^3.9.2"
+streamlit = "^1.40.1"
+plotly = "^5.24.1"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.6.9"
+python-dotenv = "^1.0.1"
+pytest = "^8.3.3"
+ipykernel = "^6.29.5"
+taskipy = "^1.14.0"
+
+[tool.ruff]
+line-length = 89
+exclude = ['./data-resident-evil/src/scrapy] # ignore path of files
+
+[tool.ruff.lint]
+select = ["I", "F", "E", "W", "PL", "PT", "B"] # Rules mandatory
+
+[tool.ruff.format]
+quote-style = 'single' # formatar todas as aspas duplas para aspas simples
+
+[tool.taskipy.tasks]
+lint = 'ruff check . && ruff check . --diff'
+format = 'ruff check . --fix && ruff format .'
 
 [build-system]
 requires = ["poetry-core"]
