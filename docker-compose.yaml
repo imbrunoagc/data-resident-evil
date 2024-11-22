@@ -7,7 +7,7 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-      - minio-data:/data   # Volume para persistir dados do MinIO
+      - minio-data:/data
     ports:
       - "9000:9000"
       - "9001:9001"
@@ -34,7 +34,7 @@ services:
   python-scripts-medallion:
     build:
       context: ./src
-    container_name: medallion
+    container_name: backend-medallion
     environment:
       ENDPOINT: http://minio:9000
       ACCESS_KEY: minioadmin
@@ -43,7 +43,7 @@ services:
       minio:
         condition: service_healthy
     volumes:
-      - ./data:/app/data   # Mapeando o diretório de dados do host para o contêiner
+      - shared-data:/app/data  # Volume compartilhado
     entrypoint: >
       sh -c "
       until curl -s http://minio:9000/minio/health/live; do
@@ -55,14 +55,17 @@ services:
 
   frontend-streamlit:
     build:
-      context: .
-      dockerfile: Dockerfile.frontend
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend-streamlit
     ports:
       - "8501:8501"
     depends_on:
-      - python-scripts-medallion
-    command: ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=127.0.0.1"] #localhost,
-
+      python-scripts-medallion:
+        condition: service_completed_successfully
+    volumes:
+      - shared-data:/app/data  # Volume compartilhado
 
 volumes:
-  minio-data:   # Definindo o volume para persistência de dados do MinIO
+  minio-data: # Volume do MinIO
+  shared-data: # Volume compartilhado entre backend e frontend
