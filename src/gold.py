@@ -13,6 +13,9 @@ from tools.rules_gold import (
     top_10_most_popular_appearances,
 )
 
+dir_current = os.path.abspath(os.path.dirname(__file__))
+path = os.path.join(dir_current, "..")
+
 class ResidentEvil_Silver_to_Gold:
     def __init__(self) -> None:
         self.client = boto3.client(
@@ -33,7 +36,8 @@ class ResidentEvil_Silver_to_Gold:
     def build_and_loadS3(self, df: pd.DataFrame, name_file: str) -> None:
         s3_resident = self.__get_bucket('resident-evil')
         s3_resident.put_parquet(df, f'gold/{name_file}.parquet')
-    
+        
+         
 if __name__ == "__main__":
     cls_gold = ResidentEvil_Silver_to_Gold()
     data = cls_gold._get_parquet_s3()
@@ -46,11 +50,11 @@ if __name__ == "__main__":
     df_average_by_blood_type = average_height_and_weight_by_blood_type(data)
     
     # Save Local
-    df_exploded.to_parquet('./data/characters_exploded.parquet', engine='pyarrow')
-    df_top_10.to_parquet('./data/top_10_characters_with_most_appearances.parquet', engine='pyarrow')
-    df_top_10_appearances.to_parquet('./data/top_10_appearances.parquet', engine='pyarrow')
-    df_blood_type_distribution.to_parquet('./data/blood_type_distribution.parquet', engine='pyarrow')
-    df_average_by_blood_type.to_parquet('./data/average_by_blood_type.parquet', engine='pyarrow')
+    df_exploded.to_parquet(os.path.join(path, "data", "characters_exploded.parquet"), engine='pyarrow')
+    df_top_10.to_parquet(os.path.join(path, "data", "top_10_characters_with_most_appearances.parquet"), engine='pyarrow')
+    df_top_10_appearances.to_parquet(os.path.join(path, "data", "top_10_appearances.parquet"), engine='pyarrow')
+    df_blood_type_distribution.to_parquet(os.path.join(path, "data", "blood_type_distribution.parquet"), engine='pyarrow')
+    df_average_by_blood_type.to_parquet(os.path.join(path, "data", "average_by_blood_type.parquet"), engine='pyarrow')
     
     # Load Layer Gold in S3
     cls_gold.build_and_loadS3(df_exploded, 'characters_exploded')
@@ -58,6 +62,5 @@ if __name__ == "__main__":
     cls_gold.build_and_loadS3(df_top_10, 'top_10_characters_with_most_appearances')
     cls_gold.build_and_loadS3(df_blood_type_distribution, 'blood_type_distribution')
     cls_gold.build_and_loadS3(df_average_by_blood_type, 'average_by_blood_type')
-    
     
     print("### 3. Finished the Gold.py Module")
