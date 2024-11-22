@@ -1,0 +1,5 @@
+# Ignorar pastas e arquivos desnecessários
+node_modules/
+.git/
+.env
+*.log
