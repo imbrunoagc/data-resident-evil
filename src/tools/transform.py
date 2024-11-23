@@ -3,16 +3,23 @@ from datetime import datetime
 
 
 def extract_year(value) -> str:
+    """
+    Extarir o ANO
+    """
     if isinstance(value, str):
         year = value.strip()[:4]
         if year.isdigit():
             year = int(year)
             current_year = datetime.now().year
-            if 1900 <= year <= current_year:
+            if 1900 <= year <= current_year:  # noqa PLR2004
                 return str(year)
     return 'Desconhecido'
 
+
 def extract_type_sanguine(value: str) -> str:
+    """
+    Extrair o conetudo de Tipo Sanguineo
+    """
     if isinstance(value, str):
         value = value.strip().lower()
         map = {
@@ -23,24 +30,43 @@ def extract_type_sanguine(value: str) -> str:
         return map.get(value, value.upper())
     return 'Desconhecido'
 
+
 def extract_height(value) -> str:
+    """
+    Extrair o conteudo de Altura
+    """
     if isinstance(value, str):  # Verifica se o valor é uma string
-        match = re.search(r'\b\d+,\d+(?:m|cm)\b', value) # Busca o primeiro padrão que corresponde a altura (ex: 1,75m ou 1,75cm)
+        match = re.search(
+            r'\b\d+,\d+(?:m|cm)\b', value
+        )  # Busca o primeiro padrão que corresponde a altura (ex: 1,75m ou 1,75cm)
 
         if match:
             return match.group(0)
-    return "Desconhecido"
+    return 'Desconhecido'
+
 
 def extract_weight(value) -> str:
-    if isinstance(value, str):     # Verifica se o valor é uma string
-        match = re.search(r'\b\d+(?:,\d+)?kg\b', value)  # Busca o primeiro padrão que corresponde ao peso (ex: 84,5kg ou 84kg)
+    """
+    Extrair o conteudo de Peso
+    """
+    if isinstance(value, str):  # Verifica se o valor é uma string
+        match = re.search(
+            r'\b\d+(?:,\d+)?kg\b', value
+        )  # Busca o primeiro padrão que corresponde ao peso (ex: 84,5kg ou 84kg)
         if match:
             return match.group(0)
-    return "Desconhecido"
+    return 'Desconhecido'
 
 
 def extract_number(value):
-    match = re.match(r"([0-9,\.]+)", str(value)) # Expressão regular para capturar o número (incluindo vírgula ou ponto como separador decimal)
+    """
+    Extrair valor numerico da String
+    """
+    match = re.match(
+        r'([0-9,\.]+)', str(value)
+    )  # Expressão regular para capturar o número (incluindo vírgula ou ponto como separador decimal)
     if match:
-        return float(match.group(1).replace(',', '.'))  # Converte para float, substituindo vírgula por ponto
+        return float(
+            match.group(1).replace(',', '.')
+        )  # Converte para float, substituindo vírgula por ponto
     return None  # Retorna None se não houver número válido

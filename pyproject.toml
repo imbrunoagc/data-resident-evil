@@ -25,8 +25,11 @@ ipykernel = "^6.29.5"
 taskipy = "^1.14.0"
 
 [tool.ruff]
-line-length = 89
-exclude = ['./data-resident-evil/src/scrapy] # ignore path of files
+line-length = 79
+ignore = [
+    "E501", # Line too long
+    #"E402", # Module level import not at top of cell
+]
 
 [tool.ruff.lint]
 select = ["I", "F", "E", "W", "PL", "PT", "B"] # Rules mandatory
