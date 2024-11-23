@@ -1,4 +1,3 @@
-
 styling = """
 <style>
 

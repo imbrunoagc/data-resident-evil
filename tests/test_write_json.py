@@ -1,14 +1,14 @@
 # tests/test_main.py
-import pytest
-from unittest.mock import patch, mock_open
-from src.scrapy.collect import write_data_raw
-from src.scrapy.paramns import COOKIES, HEADERS
+from unittest.mock import mock_open, patch
 
-FAKE_DADOS = {"nome": "Exemplo", "valor": 123}
+from src.scrapy.collect import write_data_raw
+
+FAKE_DADOS = {'nome': 'Exemplo', 'valor': 123}
+
 
 def test_write_data_raw():
     """Teste para a função write_data_raw usando mock de open."""
-    with patch("builtins.open", mock_open()) as mock_file:
+    with patch('builtins.open', mock_open()) as mock_file:
         # Chame a função sem passar o caminho (já definido no main)
         write_data_raw(FAKE_DADOS)
 
