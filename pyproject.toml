@@ -28,7 +28,7 @@ taskipy = "^1.14.0"
 line-length = 79
 ignore = [
     "E501", # Line too long
-    "E402", # Module level import not at top of cell
+    #"E402", # Module level import not at top of cell
 ]
 
 [tool.ruff.lint]
