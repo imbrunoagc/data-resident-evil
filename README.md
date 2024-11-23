@@ -173,7 +173,7 @@ docker rmi IMAGE ID
 </table>
 
 ## Demo App
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://data-resident-evil-medallion-to-deploy.streamlit.app/)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://data-resident-evil-wkwerqngfdjhsbsgrfyvzn.streamlit.app/)
 
 ## Colab notebook graphics
 [![Colab Notebook](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/imbrunoagc/data-resident-evil/blob/main_medellion/notebook/visualize_data_gold.ipynb)
