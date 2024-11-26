@@ -700,7 +700,7 @@ packaging = "*"
 psutil = "*"
 pyzmq = ">=24"
 tornado = ">=6.2"
-traitlets = "~>=5.4.0"
+traitlets = ">=5.4.0"
 
 [package.extras]
 cov = ["coverage[toml]", "curio", "matplotlib", "pytest-cov", "trio"]
