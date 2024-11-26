@@ -9,15 +9,15 @@ Este projeto de arquitetura open source tem como foco a raspagem de dados de per
 * Armazenar os dados na camada Bronze em formato JSON com Python.
 * Realizar transformações nas camadas Silver e Gold com ``pandas``.
 * Utilizar o airflow para orquestrar as ``camadas``.
-* Escrever *testes unitários* utilizando ``pytest``.
-* Aplicar o ``ruff`` para garantir a *formatação* do código Python.
+* Escrever *testes unitários* utilizando ``pytest`` - Local.
+* Aplicar o ``ruff`` para garantir a *formatação* do código Python - Local.
 * Criar um dashboard com ``Streamlit`` para visualização gráfica dos dados da camada Gold.
 * Subir todos os serviços via ``Docker``.
 
 A arquitetura proposta é a seguinte:
 <table>
     <td>
-    <img src="assets/architecture-version_1.0.png"
+    <img src="assets/architecture-version_2.0.png"
 ></img></td></tr>
 </table>
 
