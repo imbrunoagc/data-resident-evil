@@ -8,6 +8,7 @@ Este projeto de arquitetura open source tem como foco a raspagem de dados de per
 * Utilizar ``BeautifulSoup`` para a raspagem dos dados.
 * Armazenar os dados na camada Bronze em formato JSON com Python.
 * Realizar transformações nas camadas Silver e Gold com ``pandas``.
+* Utilizar o airflow para orquestrar as ``camadas``.
 * Escrever *testes unitários* utilizando ``pytest``.
 * Aplicar o ``ruff`` para garantir a *formatação* do código Python.
 * Criar um dashboard com ``Streamlit`` para visualização gráfica dos dados da camada Gold.
@@ -19,6 +20,13 @@ A arquitetura proposta é a seguinte:
     <img src="assets/architecture-version_1.0.png"
 ></img></td></tr>
 </table>
+
+**Principais ferramentas utilizadas no projeto:**  
+- **Apache Airflow**: Responsável por orquestrar pipelines de dados, automatizando tarefas e seus agendamentos;  
+- **MinIO**: Armazenamento de objetos gratuito usado para guardar e organizar os dados;  
+- **Pandas**: Biblioteca Python usada para processar, transformar e analisar os dados;  
+- **Docker**: Plataforma para criar e gerenciar containers, garantindo que os serviços rodem de forma consistente;  
+- **Streamlit**: Utilizado para criar interfaces simples e rápidas para visualização de dados.  
 
 ## Estrutura do Projeto
 * `.git` - Controle de versão.
