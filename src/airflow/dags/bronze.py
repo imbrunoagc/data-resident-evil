@@ -11,9 +11,9 @@ class ResidentEvil_to_BronzeMinio:
     def __init__(self) -> None:
         self.client = boto3.client(
             's3',
-            endpoint_url=os.environ.get('ENDPOINT'),
-            aws_access_key_id=os.environ.get('ACCESS_KEY'),
-            aws_secret_access_key=os.environ.get('SECRET_KEY'),
+            endpoint_url=os.environ.get('MINIO_ENDPOINT'),
+            aws_access_key_id=os.environ.get('MINIO_ACCESS_KEY'),
+            aws_secret_access_key=os.environ.get('MINIO_SECRET_KEY'),
             region_name='us-east-1',
         )
         self.cookies = COOKIES

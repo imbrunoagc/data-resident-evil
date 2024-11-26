@@ -24,8 +24,8 @@ default_args = {
 @dag(
     dag_id="resident_evil",
     description="pipeline",
-    schedule="* * * * *",
-    start_date=datetime(2024, 11, 25),
+    schedule=None,
+    start_date=datetime(2024, 11, 26),
     catchup=False
 )
 def pipeline_resident_evil():
