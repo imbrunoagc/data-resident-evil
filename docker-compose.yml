@@ -65,9 +65,14 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./src/airflow/dags:/opt/airflow/dags  
+      - ./src/airflow/dags:/opt/airflow/dags
 
 volumes:
   minio-data: # Volume do MinIO
   shared-data: # Volume compartilhado entre backend e frontend
   postgres_data: # Volume do PostgrSQL
+
+networks:
+  minio-airflow:
+    driver: local
+    name: minio-airflow
