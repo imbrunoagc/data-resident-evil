@@ -33,9 +33,9 @@ A arquitetura proposta é a seguinte:
 * `assets/` - Imagens e arquivos de mídia utilizados na documentação.
 * `docs/` - Documentação suplementar.
 * `notebook` - Analises pontuais em notebook
-* `src/resources/` - Arquivo de conexão com o MinIO e demais funcionalidades de coleta e inserção.
-* `src/scrapy/` - Arquivo principal com a respagem de dados do projeto.
-* `src/` - Arquivo endereçados como Bronze, Silver e Gold, que é o core do projeto.
+* `src/airflow/dags/resources/` - Arquivo de conexão com o MinIO e demais funcionalidades de coleta e inserção.
+* `src/airflow/dags/scrapy/` - Arquivo principal com a respagem de dados do projeto.
+* `src/airflow/dags/` - Arquivo endereçados como Bronze, Silver e Gold, que é o core do projeto com a DAG para orquestração do processo.
 * `tests/` - Arquivo que propõe teste unitários em classes e métodos.
 
 
@@ -43,27 +43,48 @@ A arquitetura proposta é a seguinte:
 
 ```bash
 |
+|── .devcontainer/
+|── .dockerignore
+|── .docker-compose.yml
 |── .gitignore
 |── .python-version
 |── requirements.txt
 |── poetry.lock
 |── pyproject.toml
 |── README.md
+|── assets/
+|── config_airflow/
+|   └── airflow.Dockerfile
+|── data/
+|── docs/
+|── frontend/
+|   |── components/
+|   |       |── footer.py
+|   |       └── inputs_css.py
+|   |── configs/
+|   |       └── settings_page.py
+|   |── app.py
+|   |── Dockerfile.py
+|   └── requirements.txt
+|── notebook/
 |── src/
-|   |── resources/
-|   |   |── __init__.py
-|   |   └── minio_manager.py
-|   |── scrapy/
-|   |   |── __init__.py
-|   |   |── collect.py
-|   |   └── paramns.py
-|   |── tools/
-|   |   |── transform.py
-|   |   └── rules_gold.py
-|   |── __init__.py
-|   |── bronze.py
-|   |── silver.py
-|   └── gold.py
+|   └── airflow/
+|          └── dags/
+|                |── resources/
+|                |   |── __init__.py
+|                |   └── minio_manager.py
+|                |── scrapy/
+|                |   |── __init__.py
+|                |   |── collect.py
+|                |   └── paramns.py
+|                |── tools/
+|                |   |── transform.py
+|                |   └── rules_gold.py
+|                |── __init__.py
+|                |── bronze.py
+|                |── silver.py
+|                |── gold.py
+|                └── TaskGroup.py
 |
 └── tests/
         |── test_1.py
@@ -80,7 +101,7 @@ A arquitetura proposta é a seguinte:
 
 #### **2. Execute o projeto**
 ```bash
-> docker-compose up
+> docker-compose up --build
 ``` 
 
 ## Setup de execução do projeto em Docker
