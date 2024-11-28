@@ -12,9 +12,10 @@ class collect:
         self.cookies = cookies
         self.headers = headers
 
+
     def get_content(self, url: str) -> List:
         response = requests.get(
-            url=url, cookies=self.cookies, headers=self.headers
+            url=url, headers=self.headers, timeout=10
         )
         print(response.status_code)
         return response
