@@ -50,6 +50,20 @@ class ResidentEvil_Silver_to_Gold:
         df_top_10_appearances = top_10_most_popular_appearances(df_exploded)
         df_blood_type_distribution = blood_type_distribution(data)
         df_average_by_blood_type = average_height_and_weight_by_blood_type(data)
+        
+        self.build_and_loadS3(df_exploded, 'characters_exploded')
+        self.build_and_loadS3(
+            df_top_10_appearances, 'top_10_most_popular_appearances'
+        )
+        self.build_and_loadS3(
+            df_top_10, 'top_10_characters_with_most_appearances'
+        )
+        self.build_and_loadS3(
+            df_blood_type_distribution, 'blood_type_distribution'
+        )
+        self.build_and_loadS3(
+            df_average_by_blood_type, 'average_by_blood_type'
+        )
 
 if __name__ == '__main__':
     cls_gold = ResidentEvil_Silver_to_Gold()
