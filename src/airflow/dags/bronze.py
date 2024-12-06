@@ -4,7 +4,6 @@ import boto3
 
 from resources.boto3_manager import PandasBucket
 from scrapy.collect import collect
-from scrapy.paramns import COOKIES, HEADERS
 
 
 class ResidentEvil_to_BronzeMinio:
@@ -16,11 +15,9 @@ class ResidentEvil_to_BronzeMinio:
             aws_secret_access_key=os.environ.get('MINIO_SECRET_KEY'),
             region_name='us-east-1',
         )
-        self.cookies = COOKIES
-        self.headers = HEADERS
 
     def run_bronze(self, name_bucket: str, name_file: str):
-        data_resident_evil = collect(self.cookies, self.headers).run_collect(
+        data_resident_evil = collect().run_collect(
             if_local=False
         )
         s3_bronze = PandasBucket(client=self.client, name=name_bucket)

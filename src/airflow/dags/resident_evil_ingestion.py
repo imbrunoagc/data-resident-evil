@@ -6,26 +6,15 @@ from airflow.decorators import dag, task
 # from airflow.utils.dates import days_ago
 # from airflow.utils.task_group import TaskGroup
 
-
 from bronze import ResidentEvil_to_BronzeMinio
 from silver import ResidentEvil_Bronze_to_Silver
 from gold import ResidentEvil_Silver_to_Gold
-
-default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email': ['airflow@example.com'],
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 1,
-    'retry_delay': timedelta(minutes=5)
-}
 
 @dag(
     dag_id="resident_evil",
     description="pipeline",
     schedule=None,
-    start_date=datetime(2024, 11, 26),
+    start_date=datetime(2024, 12, 5),
     catchup=False
 )
 def pipeline_resident_evil():
