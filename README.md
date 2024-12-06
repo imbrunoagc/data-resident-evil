@@ -130,6 +130,14 @@ docker rmi IMAGE ID
 ```
 ![alt text](assets/docker-rmi-images.png)
 
+3. Acessar o ambiente do airflow para executar a ``DAG``.
+
+* Através do ambiente do docker-desktop acesse o ``airflow`` -> ``files/``.
+* Abra o arquivo ``standalone_admin_password.txt`` no diretório ``opt/airflow`` e guarde a chave em um local seguro.
+* Acesse a porta do airflow atraves do navegador desejado.
+* user: admin
+* password: conteudo armazenado no arquio ``standalone_admin_password.txt``
+
 ## Métricas e Regras | Gold
 
 | **Métrica**                     | **Cálculo/Regra**                                                                 | **Gold? (Sim/Não)**                                                                                                        |
