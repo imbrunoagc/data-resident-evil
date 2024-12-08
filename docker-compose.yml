@@ -67,12 +67,22 @@ services:
     volumes:
       - ./src/airflow/dags:/opt/airflow/dags
 
+
+  frontend-streamlit:
+      build:
+        context: ./frontend
+        dockerfile: Dockerfile
+      container_name: frontend-streamlit
+      ports:
+        - "8501:8501"
+      depends_on:
+        - airflow
+      environment:
+        MINIO_ENDPOINT: http://minio:9000
+        MINIO_ACCESS_KEY: minioadmin
+        MINIO_SECRET_KEY: minioadmin
+    
 volumes:
   minio-data: # Volume do MinIO
   shared-data: # Volume compartilhado entre backend e frontend
   postgres_data: # Volume do PostgrSQL
-
-networks:
-  minio-airflow:
-    driver: local
-    name: minio-airflow
