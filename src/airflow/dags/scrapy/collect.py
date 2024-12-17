@@ -5,16 +5,17 @@ from typing import Dict, List
 import requests
 from bs4 import BeautifulSoup
 from tqdm import tqdm
-
+from fake_useragent import UserAgent
 
 class collect:
-    def __init__(self, cookies, headers) -> None:
-        self.cookies = cookies
-        self.headers = headers
+    def __init__(self) -> None:
+        
+        ua = UserAgent()
+        self.headers = {'User-Agent':str(ua.chrome)}
 
     def get_content(self, url: str) -> List:
         response = requests.get(
-            url=url, cookies=self.cookies, headers=self.headers
+            url=url, headers=self.headers, timeout=10
         )
         print(response.status_code)
         return response
@@ -56,7 +57,7 @@ class collect:
     def get_links(self) -> List:
         url = 'https://www.residentevildatabase.com/personagens/'
         resp = requests.get(
-            url=url, headers=self.headers, cookies=self.cookies
+            url=url, headers=self.headers
         )
         soup_personagens = BeautifulSoup(resp.text)
         ancoras = soup_personagens.find(
@@ -104,8 +105,10 @@ class collect:
 
 
 if __name__ == '__main__':
-    from paramns import COOKIES, HEADERS
+        
+    ua = UserAgent()
+    header = {'User-Agent':str(ua.chrome)}
 
     FILE_PATH = '././data/raw/basic_information_characters.json'
-    data = collect(COOKIES, HEADERS).run_collect(FILE_PATH, False)
+    data = collect(header).run_collect(FILE_PATH, False)
     print(data)

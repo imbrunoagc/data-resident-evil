@@ -1,9 +1,11 @@
 import os
 
-import pandas as pd
 import streamlit as st
+import pandas as pd
+import boto3
+
+from resources.boto3_manager import PandasBucket
 from components.footer import footer
-from components.input_css import styling
 from configs.settings_page import setup_page
 
 dir_current = os.path.abspath(os.path.dirname(__file__))
@@ -12,9 +14,15 @@ path_data = os.path.join(path_raiz, 'data')
 
 setup_page()  # Page configuration
 
-st.markdown(styling, unsafe_allow_html=True)  # CSS styling in metrics
+client = boto3.client(
+    's3',
+    endpoint_url=os.environ.get('MINIO_ENDPOINT'),
+    aws_access_key_id=os.environ.get('MINIO_ACCESS_KEY'),
+    aws_secret_access_key=os.environ.get('MINIO_SECRET_KEY'),
+    region_name='us-east-1',
+)
 
-LOCAL = True
+LOCAL = False
 
 if LOCAL:  # Local
     df = pd.read_parquet(
@@ -37,6 +45,16 @@ if LOCAL:  # Local
     df_blood_type_distribution = pd.read_parquet(
         f'{path_data}/blood_type_distribution.parquet', engine='pyarrow'
     )
+else:
+    
+    bucket_resientevil = PandasBucket(client=client, name='resident-evil')
+
+    df = bucket_resientevil.read_parquet(name='gold/characters_exploded.parquet')
+    df_top_10_characters_with_most_appearances = bucket_resientevil.read_parquet(name='gold/top_10_characters_with_most_appearances.parquet')
+    df_top_10_appearances = bucket_resientevil.read_parquet(name='gold/top_10_most_popular_appearances.parquet')
+    df_average_by_blood_type = bucket_resientevil.read_parquet(name='gold/average_by_blood_type.parquet')
+    df_blood_type_distribution = bucket_resientevil.read_parquet(name='gold/blood_type_distribution.parquet')
+    
 
 col1, col2, col3 = st.columns([1, 3, 1])  # Set 3 columns
 

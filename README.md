@@ -8,17 +8,25 @@ Este projeto de arquitetura open source tem como foco a raspagem de dados de per
 * Utilizar ``BeautifulSoup`` para a raspagem dos dados.
 * Armazenar os dados na camada Bronze em formato JSON com Python.
 * Realizar transformações nas camadas Silver e Gold com ``pandas``.
-* Escrever *testes unitários* utilizando ``pytest``.
-* Aplicar o ``ruff`` para garantir a *formatação* do código Python.
+* Utilizar o airflow para orquestrar as ``camadas``.
+* Escrever *testes unitários* utilizando ``pytest`` - Local.
+* Aplicar o ``ruff`` para garantir a *formatação* do código Python - Local.
 * Criar um dashboard com ``Streamlit`` para visualização gráfica dos dados da camada Gold.
 * Subir todos os serviços via ``Docker``.
 
 A arquitetura proposta é a seguinte:
 <table>
     <td>
-    <img src="assets/architecture-version_1.0.png"
+    <img src="assets/architecture-version_2.0.png"
 ></img></td></tr>
 </table>
+
+**Principais ferramentas utilizadas no projeto:**  
+- **Apache Airflow**: Responsável por orquestrar pipelines de dados, automatizando tarefas e seus agendamentos;  
+- **MinIO**: Armazenamento de objetos gratuito usado para guardar e organizar os dados;  
+- **Pandas**: Biblioteca Python usada para processar, transformar e analisar os dados;  
+- **Docker**: Plataforma para criar e gerenciar containers, garantindo que os serviços rodem de forma consistente;  
+- **Streamlit**: Utilizado para criar interfaces simples e rápidas para visualização de dados.  
 
 ## Estrutura do Projeto
 * `.git` - Controle de versão.
@@ -33,9 +41,9 @@ A arquitetura proposta é a seguinte:
 * `assets/` - Imagens e arquivos de mídia utilizados na documentação.
 * `docs/` - Documentação suplementar.
 * `notebook` - Analises pontuais em notebook
-* `src/resources/` - Arquivo de conexão com o MinIO e demais funcionalidades de coleta e inserção.
-* `src/scrapy/` - Arquivo principal com a respagem de dados do projeto.
-* `src/` - Arquivo endereçados como Bronze, Silver e Gold, que é o core do projeto.
+* `src/airflow/dags/resources/` - Arquivo de conexão com o MinIO e demais funcionalidades de coleta e inserção.
+* `src/airflow/dags/scrapy/` - Arquivo principal com a respagem de dados do projeto.
+* `src/airflow/dags/` - Arquivo endereçados como Bronze, Silver e Gold, que é o core do projeto com a DAG para orquestração do processo.
 * `tests/` - Arquivo que propõe teste unitários em classes e métodos.
 
 
@@ -43,27 +51,48 @@ A arquitetura proposta é a seguinte:
 
 ```bash
 |
+|── .devcontainer/
+|── .dockerignore
+|── .docker-compose.yml
 |── .gitignore
 |── .python-version
 |── requirements.txt
 |── poetry.lock
 |── pyproject.toml
 |── README.md
+|── assets/
+|── config_airflow/
+|   └── airflow.Dockerfile
+|── data/
+|── docs/
+|── frontend/
+|   |── components/
+|   |       |── footer.py
+|   |       └── inputs_css.py
+|   |── configs/
+|   |       └── settings_page.py
+|   |── app.py
+|   |── Dockerfile.py
+|   └── requirements.txt
+|── notebook/
 |── src/
-|   |── resources/
-|   |   |── __init__.py
-|   |   └── minio_manager.py
-|   |── scrapy/
-|   |   |── __init__.py
-|   |   |── collect.py
-|   |   └── paramns.py
-|   |── tools/
-|   |   |── transform.py
-|   |   └── rules_gold.py
-|   |── __init__.py
-|   |── bronze.py
-|   |── silver.py
-|   └── gold.py
+|   └── airflow/
+|          └── dags/
+|                |── resources/
+|                |   |── __init__.py
+|                |   └── minio_manager.py
+|                |── scrapy/
+|                |   |── __init__.py
+|                |   |── collect.py
+|                |   └── paramns.py
+|                |── tools/
+|                |   |── transform.py
+|                |   └── rules_gold.py
+|                |── __init__.py
+|                |── bronze.py
+|                |── silver.py
+|                |── gold.py
+|                └── TaskGroup.py
 |
 └── tests/
         |── test_1.py
@@ -80,7 +109,7 @@ A arquitetura proposta é a seguinte:
 
 #### **2. Execute o projeto**
 ```bash
-> docker-compose up
+> docker-compose up --build
 ``` 
 
 ## Setup de execução do projeto em Docker
@@ -100,6 +129,14 @@ docker images
 docker rmi IMAGE ID
 ```
 ![alt text](assets/docker-rmi-images.png)
+
+3. Acessar o ambiente do airflow para executar a ``DAG``.
+
+* Através do ambiente do docker-desktop acesse o ``airflow`` -> ``files/``.
+* Abra o arquivo ``standalone_admin_password.txt`` no diretório ``opt/airflow`` e guarde a chave em um local seguro.
+* Acesse a porta do airflow atraves do navegador desejado.
+* user: admin
+* password: conteudo armazenado no arquio ``standalone_admin_password.txt``
 
 ## Métricas e Regras | Gold
 
